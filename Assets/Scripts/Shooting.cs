@@ -37,6 +37,5 @@ public class Shooting : MonoBehaviour
     {
         yield return new WaitForSeconds(reloadTime);
         reloading = false;
-        Debug.Log($"Reloaded.");
     }
 }

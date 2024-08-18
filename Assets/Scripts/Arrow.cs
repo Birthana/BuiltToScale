@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class Arrow : MonoBehaviour
 {
+    [SerializeField] private int baseDamage;
+    [SerializeField] private float critPercentage;
+    [SerializeField] private float critMultiplier;
     [SerializeField] private float arrowSpeed;
     private Rigidbody2D rb;
     private BoxCollider2D hitBox;
@@ -15,8 +18,39 @@ public class Arrow : MonoBehaviour
 
     private void Update()
     {
+        Hit();
         SetAngle();
         Delete();
+    }
+
+    private void Hit()
+    {
+        var results = new List<Collider2D>();
+        var filter = new ContactFilter2D();
+        filter.SetLayerMask(1 << LayerMask.NameToLayer("Creature"));
+        if (hitBox.OverlapCollider(filter, results) > 0)
+        {
+            var firstCreature = results[0].gameObject.GetComponent<Creature>();
+            firstCreature.TakeDamage(GetDamage());
+            Destroy(gameObject);
+        }
+    }
+
+    private int GetDamage()
+    {
+        return (int)(baseDamage * GetDamageMultiplier());
+    }
+
+    private float GetDamageMultiplier()
+    {
+        var rng = Random.Range(0, (int)(100 / critPercentage));
+        if (rng == 0)
+        {
+            Debug.Log("Crit.");
+            return critMultiplier;
+        }
+
+        return 1.0f;
     }
 
     private void Delete()
@@ -33,7 +67,7 @@ public class Arrow : MonoBehaviour
         SetAngle();
     }
 
-    private Vector2 GetDirection()
+    private Vector3 GetDirection()
     {
         var rawDirection = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
         return rawDirection.normalized;
