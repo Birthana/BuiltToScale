@@ -553,7 +553,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f4ada476810066479f5b158a07b1896, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  creaturePrefab: {fileID: 6982895089937984458, guid: ba28b6109c8ceea408382777d9beaaeb, type: 3}
+  creaturePrefab: {fileID: -6183237403939841653, guid: ba28b6109c8ceea408382777d9beaaeb, type: 3}
   cooldownTime: 4
 --- !u!4 &1964089946
 Transform:

@@ -1,10 +1,13 @@
+using System.Collections;
 using UnityEngine;
 
 public class Creature : MonoBehaviour
 {
     public float runSpeed;
+    public float pauseTime;
     private Rigidbody2D rb;
     private Health health;
+    private bool isPaused = false;
 
     private void Awake()
     {
@@ -17,10 +20,33 @@ public class Creature : MonoBehaviour
     {
         Move();
     }
-    public void TakeDamage(int damage) { health.TakeDamage(damage); }
+
+    public void TakeDamage(int damage)
+    {
+        health.TakeDamage(damage);
+        Pause();
+    }
+
+    public void Pause()
+    {
+        isPaused = true;
+        rb.velocity = Vector2.zero;
+        StartCoroutine(Pausing());
+    }
+
+    private IEnumerator Pausing()
+    {
+        yield return new WaitForSeconds(pauseTime);
+        isPaused = false;
+    }
 
     private void Move()
     {
+        if (isPaused)
+        {
+            return;
+        }
+
         var horizontalSpeed = runSpeed;
         rb.velocity = new Vector2(horizontalSpeed, rb.velocity.y);
     }
