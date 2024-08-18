@@ -1,0 +1,31 @@
+using System;
+using UnityEngine;
+
+public class Ammo : MonoBehaviour
+{
+    public event Action<int> OnChange;
+    public int maxSize;
+    private int currentSize;
+
+    private void Awake()
+    {
+        Refill();
+    }
+
+    public void Refill()
+    {
+        currentSize = maxSize;
+        OnChange?.Invoke(currentSize);
+    }
+
+    public bool IsNotEmpty()
+    {
+        return currentSize != 0;
+    }
+
+    public void Use()
+    {
+        currentSize = Mathf.Max(0, currentSize - 1);
+        OnChange?.Invoke(currentSize);
+    }
+}

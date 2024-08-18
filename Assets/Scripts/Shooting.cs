@@ -6,6 +6,12 @@ public class Shooting : MonoBehaviour
     public Arrow arrowPrefab;
     [SerializeField]private float reloadTime;
     private bool reloading = false;
+    private Ammo ammo;
+
+    private void Awake()
+    {
+        ammo = GetComponent<Ammo>();
+    }
 
     void Update()
     {
@@ -17,6 +23,7 @@ public class Shooting : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && CanFire())
         {
             reloading = true;
+            ammo.Use();
             SpawnArrow();
             StartCoroutine(Reloading());
         }
@@ -30,7 +37,7 @@ public class Shooting : MonoBehaviour
 
     private bool CanFire()
     {
-        return !reloading;
+        return !reloading && ammo.IsNotEmpty();
     }
 
     private IEnumerator Reloading()

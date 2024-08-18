@@ -25,12 +25,10 @@ public class Arrow : MonoBehaviour
 
     private void Hit()
     {
-        var results = new List<Collider2D>();
-        var filter = new ContactFilter2D();
-        filter.SetLayerMask(1 << LayerMask.NameToLayer("Creature"));
-        if (hitBox.OverlapCollider(filter, results) > 0)
+        var collisions = Utility.GetCollisions(hitBox, "Creature");
+        if (collisions.Count > 0)
         {
-            var firstCreature = results[0].gameObject.GetComponent<Creature>();
+            var firstCreature = collisions[0].gameObject.GetComponent<Creature>();
             var multiplier = GetDamageMultiplier();
             var damage = (int)(baseDamage * multiplier);
             var isCrit = multiplier == critMultiplier;
@@ -44,7 +42,6 @@ public class Arrow : MonoBehaviour
         var rng = Random.Range(0, (int)(100 / critPercentage));
         if (rng == 0)
         {
-            Debug.Log("Crit.");
             return critMultiplier;
         }
 
@@ -65,15 +62,10 @@ public class Arrow : MonoBehaviour
         SetAngle();
     }
 
-    private Vector3 GetDirection()
-    {
-        var rawDirection = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-        return rawDirection.normalized;
-    }
-
     private void SetSpeed()
     {
-        var direction = GetDirection();
+        Vector2 click = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+        var direction = click / click.magnitude;
         rb.velocity = direction * arrowSpeed;
     }
 
@@ -85,9 +77,6 @@ public class Arrow : MonoBehaviour
 
     private bool OffScreen()
     {
-        var results = new List<Collider2D>();
-        var filter = new ContactFilter2D();
-        filter.SetLayerMask(1 << LayerMask.NameToLayer("OffScreen"));
-        return hitBox.OverlapCollider(filter, results) > 0;
+        return Utility.GetCollisions(hitBox, "OffScreen").Count > 0;
     }
 }

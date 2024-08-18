@@ -7,7 +7,7 @@ public class Health : MonoBehaviour
     public event Action<int, bool> OnDamage;
     public event Action OnDeath;
     public int maxHealth;
-    private int currentHealth;
+    [SerializeField]private int currentHealth;
 
     private void Awake()
     {

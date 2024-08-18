@@ -149,4 +149,4 @@ MonoBehaviour:
   baseDamage: 5
   critPercentage: 20
   critMultiplier: 2
-  arrowSpeed: 20
+  arrowSpeed: 7
