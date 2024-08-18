@@ -1,33 +1,68 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+
+[Serializable]
+public struct WaveEntry
+{
+    public Creature creature;
+    public int number;
+}
 
 public class Spawner : MonoBehaviour
 {
-    public Creature creaturePrefab;
+    public List<WaveEntry> waves = new List<WaveEntry>();
     [SerializeField]private float cooldownTime;
-    private bool isCoolingDown = false;
+    private int waveIndex = 0;
+    private bool isSpawning = false;
+    private int waveCount = 1;
 
-    // Update is called once per frame
-    void Update()
+    private void Awake()
     {
-        Spawn();
+        GetComponentInChildren<WaveUI>().SetText(0);
     }
 
-    private void Spawn()
+    public void SpawnNextWave()
     {
-        if (isCoolingDown)
+        if (isSpawning || MonstersStillAlive())
         {
             return;
         }
 
-        isCoolingDown = true;
-        var creature = Instantiate(creaturePrefab, transform);
-        StartCoroutine(CoolingDown());
+        FindObjectOfType<Ammo>().Refill();
+        GetComponentInChildren<WaveUI>().SetText(waveCount);
+        isSpawning = true;
+        StartCoroutine(SpawningWave());
     }
 
-    private IEnumerator CoolingDown()
+    public bool IsRunning() { return isSpawning; }
+
+    private bool MonstersStillAlive()
     {
-        yield return new WaitForSeconds(cooldownTime);
-        isCoolingDown = false;
+        return FindObjectsOfType<Creature>().Length > 0;
+    }
+
+    private IEnumerator SpawningWave()
+    {
+        for (int i = 0; i < waves[waveIndex].number; i++)
+        {
+            Spawn(waves[waveIndex].creature);
+            yield return new WaitForSeconds(cooldownTime);
+        }
+
+        IncreaseWaveCount();
+        isSpawning = false;
+    }
+
+    private void IncreaseWaveCount()
+    {
+        waveCount++;
+        waveIndex = Mathf.Min(waveIndex + 1, waves.Count - 1);
+    }
+
+    private void Spawn(Creature creature)
+    {
+        var spawnedCreature = Instantiate(creature, transform);
     }
 }
