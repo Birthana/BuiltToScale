@@ -147,6 +147,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseDamage: 5
-  critPercentage: 10
+  critPercentage: 20
   critMultiplier: 2
   arrowSpeed: 20

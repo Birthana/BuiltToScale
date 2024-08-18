@@ -31,14 +31,12 @@ public class Arrow : MonoBehaviour
         if (hitBox.OverlapCollider(filter, results) > 0)
         {
             var firstCreature = results[0].gameObject.GetComponent<Creature>();
-            firstCreature.TakeDamage(GetDamage());
+            var multiplier = GetDamageMultiplier();
+            var damage = (int)(baseDamage * multiplier);
+            var isCrit = multiplier == critMultiplier;
+            firstCreature.TakeDamage(damage, isCrit);
             Destroy(gameObject);
         }
-    }
-
-    private int GetDamage()
-    {
-        return (int)(baseDamage * GetDamageMultiplier());
     }
 
     private float GetDamageMultiplier()

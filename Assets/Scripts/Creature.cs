@@ -21,9 +21,9 @@ public class Creature : MonoBehaviour
         Move();
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damage, bool isCrit)
     {
-        health.TakeDamage(damage);
+        health.TakeDamage(damage, isCrit);
         Pause();
     }
 
