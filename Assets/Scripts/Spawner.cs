@@ -11,14 +11,14 @@ public struct WaveEntry
 }
 
 [Serializable]
-public struct WaveEntry_
+public struct Wave
 {
     public List<WaveEntry> creatures;
 }
 
 public class Spawner : MonoBehaviour
 {
-    public List<WaveEntry> waves = new List<WaveEntry>();
+    public List<Wave> waves = new List<Wave>();
     [SerializeField]private float cooldownTime;
     private int waveIndex = 0;
     private bool isSpawning = false;
@@ -49,12 +49,21 @@ public class Spawner : MonoBehaviour
         return FindObjectsOfType<Creature>().Length > 0;
     }
 
+    private IEnumerator SpawningWaveEntry(WaveEntry entry)
+    {
+        for (int i = 0; i < entry.number; i++)
+        {
+            Spawn(entry.creature);
+            yield return new WaitForSeconds(cooldownTime);
+        }
+    }
+
     private IEnumerator SpawningWave()
     {
-        for (int i = 0; i < waves[waveIndex].number; i++)
+        var creatures = waves[waveIndex].creatures;
+        foreach (var entry in creatures)
         {
-            Spawn(waves[waveIndex].creature);
-            yield return new WaitForSeconds(cooldownTime);
+            yield return StartCoroutine(SpawningWaveEntry(entry));
         }
 
         IncreaseWaveCount();

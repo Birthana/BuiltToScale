@@ -8,7 +8,7 @@ public class Shooting : MonoBehaviour
     [SerializeField] private float critPercentage;
     [SerializeField] private float critMultiplier;
     [SerializeField] private float arrowSpeed;
-    [SerializeField]private float reloadTime;
+    [SerializeField] private float reloadTime;
     private int currentDamage;
     private float currentCritPercentage;
     private float currentCritMultiplier;
@@ -73,5 +73,10 @@ public class Shooting : MonoBehaviour
     public void ReduceReload(float time)
     {
         currentReloadTime = Mathf.Max(0, currentReloadTime - time);
+    }
+
+    public void IncreaseArrowSpeed(float speed)
+    {
+        currentArrowSpeed += speed;
     }
 }
