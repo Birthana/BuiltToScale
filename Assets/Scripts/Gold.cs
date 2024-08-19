@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Gold : MonoBehaviour
@@ -22,5 +21,10 @@ public class Gold : MonoBehaviour
     {
         goldAmount = Mathf.Max(0, goldAmount - gold);
         OnChange?.Invoke(goldAmount);
+    }
+
+    public bool Has(int gold)
+    {
+        return goldAmount >= gold;
     }
 }

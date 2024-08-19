@@ -10,6 +10,12 @@ public struct WaveEntry
     public int number;
 }
 
+[Serializable]
+public struct WaveEntry_
+{
+    public List<WaveEntry> creatures;
+}
+
 public class Spawner : MonoBehaviour
 {
     public List<WaveEntry> waves = new List<WaveEntry>();

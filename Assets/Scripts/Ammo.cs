@@ -5,16 +5,18 @@ public class Ammo : MonoBehaviour
 {
     public event Action<int> OnChange;
     public int maxSize;
+    private int currentMaxSize;
     private int currentSize;
 
     private void Awake()
     {
+        currentMaxSize = maxSize;
         Refill();
     }
 
     public void Refill()
     {
-        currentSize = maxSize;
+        currentSize = currentMaxSize;
         OnChange?.Invoke(currentSize);
     }
 
@@ -27,5 +29,10 @@ public class Ammo : MonoBehaviour
     {
         currentSize = Mathf.Max(0, currentSize - 1);
         OnChange?.Invoke(currentSize);
+    }
+
+    public void IncreaseSize(int size)
+    {
+        currentMaxSize += size;
     }
 }

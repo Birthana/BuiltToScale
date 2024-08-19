@@ -76,6 +76,23 @@ public class Creature : MonoBehaviour
         }
     }
 
+    protected void AttackTower()
+    {
+        if (CanAttackTower() && !isOnCooldown)
+        {
+            isOnCooldown = true;
+            SetVelocity(Vector2.zero);
+            var results = Utility.GetCollisions(hitBox, "Climbable");
+            results[0].GetComponent<Health>().TakeDamage(1, false);
+            StartCoroutine(AttackCooldown());
+        }
+    }
+
+    private bool CanAttackTower()
+    {
+        return Utility.GetCollisions(hitBox, "Climbable").Count > 0;
+    }
+
     private IEnumerator AttackCooldown()
     {
         yield return new WaitForSeconds(attackCooldown);
@@ -85,6 +102,11 @@ public class Creature : MonoBehaviour
     private bool CanAttack()
     {
         return Utility.GetCollisions(hitBox, "Sugar").Count > 0;
+    }
+
+    protected bool IsAttacking()
+    {
+        return isOnCooldown;
     }
 
     protected void Climb()

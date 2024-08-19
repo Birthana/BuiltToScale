@@ -56,8 +56,12 @@ public class Arrow : MonoBehaviour
         }
     }
 
-    public void Set()
+    public void Set(int damage, float percentage, float multiplier, float speed)
     {
+        baseDamage = damage;
+        critPercentage = percentage;
+        critMultiplier = multiplier;
+        arrowSpeed = speed;
         SetSpeed();
         SetAngle();
     }
