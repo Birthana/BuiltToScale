@@ -65,7 +65,6 @@ public class BuildTower : Option
     private bool IsOnLayer(BoxCollider2D hitBox, string layer)
     {
         var hit = Physics2D.OverlapBoxAll(GetPosition(), hitBox.size, 0, 1 << LayerMask.NameToLayer(layer));
-        Debug.Log($"{hit.Length}");
         return hit.Length > 0;
     }
 }

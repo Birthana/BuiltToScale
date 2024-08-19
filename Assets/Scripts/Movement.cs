@@ -7,11 +7,13 @@ public class Movement : MonoBehaviour
     [SerializeField] private float climbSpeed;
     private Rigidbody2D rb;
     private BoxCollider2D hitBox;
+    private Animator anim;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         hitBox = GetComponent<BoxCollider2D>();
+        anim = GetComponent<Animator>();
     }
 
     private void Update()
@@ -27,7 +29,19 @@ public class Movement : MonoBehaviour
             var direction = Input.GetAxis("Horizontal");
             var horizontalSpeed = direction * runSpeed;
             rb.velocity = new Vector2(horizontalSpeed, rb.velocity.y);
+            PlayWalkAnimation(direction);
         }
+    }
+
+    private void PlayWalkAnimation(float direction)
+    {
+        if (direction >= 0)
+        {
+            anim.Play("Player_Walk_Right");
+            return;
+        }
+
+        anim.Play("Player_Walk");
     }
 
     private void MoveUpOrDown()
