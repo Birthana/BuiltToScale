@@ -42,7 +42,9 @@ public class BuildTower : Option
         towerCheck.transform.position = GetPosition();
         var hitBox = towerCheck.GetComponent<BoxCollider2D>();
 
-        if (IsOnTower(hitBox) || IsOnPlayer(hitBox) || IsOnDescend(hitBox) || IsOnAmmo(hitBox) || IsOnSugar(hitBox))
+        if (IsOnTower(hitBox) || IsOnPlayer(hitBox) || 
+            IsOnDescend(hitBox) || IsOnAmmo(hitBox) || 
+            IsOnSugar(hitBox) || IsOnOffscreen(hitBox))
         {
             Destroy(towerCheck);
             return false;
@@ -62,9 +64,11 @@ public class BuildTower : Option
 
     private bool IsOnSugar(BoxCollider2D hitBox) { return IsOnLayer(hitBox, "Sugar"); }
 
+    private bool IsOnOffscreen(BoxCollider2D hitBox) { return IsOnLayer(hitBox, "OffScreen"); }
+
     private bool IsOnLayer(BoxCollider2D hitBox, string layer)
     {
-        var hit = Physics2D.OverlapBoxAll(GetPosition(), hitBox.size, 0, 1 << LayerMask.NameToLayer(layer));
+        var hit = Physics2D.OverlapBoxAll(GetPosition(), hitBox.size * 3, 0, 1 << LayerMask.NameToLayer(layer));
         return hit.Length > 0;
     }
 }
